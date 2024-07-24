@@ -8,7 +8,7 @@ playButton.addEventListener('click', game, timer);
 
 // Imposto il timer a 6 secondi
 
-let counter = 5;
+let counter = 30;
 
 // Funzione generica per generare un numero random compreso tra min e max
 function rndNumGenerator(min, max) {
@@ -29,7 +29,15 @@ const rndNumbers = [];
 
 // Imposto un valore 1 a k
 
-let k = 1;
+let k = 0;
+
+// Creo una costante punteggio
+
+let points = 0;
+
+// Porto in JS il valore dello span "punteggio"
+
+const userPoints = document.getElementById('points');
 
 // Funzione generica "game"
 
@@ -42,7 +50,7 @@ function game(e) {
 
     // Fin quando k è minore/uguale a 5
 
-    while(k <= 5) {
+    while(k < 5) {
 
         // Genero un numero random tra 1 e 100 e lo imposto a computerNumber
 
@@ -66,26 +74,13 @@ function game(e) {
 
     // Imposta a clock un intervallo ogni 1000 secondi che attiva la funzione "timer".
 
-    clock = setInterval(timer, 1000);
+    clock = setInterval(function() {
 
-    // Dopo 5 secondi, nascondi il div "computerNumbers"
-    
-    let hideNumbers = setTimeout(function() {
-        computerNumbers.style.display = 'none';
-    },5000)
-}
+        // Se il counter arriva a 0
 
-// Creo un array vuota
+        if (counter == 0) {
 
-const userGuessArray = []
-
-// Funzione generica Timer
-
-function timer() { 
-
-    // Se il counter arriva a 0
-
-    if (counter == 0) {
+        computerNumbers.innerHTML = '';
 
         // Creo un ciclo che parte da 0 e arriva a 4
 
@@ -95,25 +90,28 @@ function timer() {
             let userGuess = parseInt(prompt('Inserisci i numeri visualizzati'));
             console.log(userGuess, typeof userGuess)
 
-            // Pusha il valore della risposta dell'utente nell'array vuota creata prima
+            // Verifico una volta per numero se l'array di numeri random include il valore inserito dall'utente:
 
-            userGuessArray.push(userGuess.value);          
-        }
+            if (rndNumbers.includes(userGuess)) {
 
-        // Confronto se l'array dopo esser stata riempita dalle risposte è uguale all'array con i numeri generati dal computer
+                // Il valore dei punti sale di uno
 
-        if (userGuessArray.value == rndNumbers.value) { 
+                points++;
 
-            // Se è uguale, l'utente ha vinto
-            alert('Hai vinto!')       
+                console.log(points);
 
-        } else {
+                // Stampo in HTML il valore del punteggio
+
+                userPoints.innerHTML = points;
+
+                // Se i punti sono 5, quindi il massimo, mando un alert che l'utente ha vinto
+
+                if (points == 5) {
+                    alert('Hai vinto! Hai indovinato tutti i numeri.');
+                }
+            }
             
-            // Altrimenti, l'utente ha perso
-            alert ('Hai perso!')
         }
-        
-
 
         // Interrompi l'intervallo
         clearInterval(clock);
@@ -134,7 +132,9 @@ function timer() {
     // Stampo nell'HTML del div "timer" il counter
 
     gameTimer.innerHTML = counter;
-}
 
+}, 1000);
+    
+} 
 
 
